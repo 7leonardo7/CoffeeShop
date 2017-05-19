@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+    <title>Orders</title>
+</h:head>
+
+<h:body>
+
+    <h:form>
+        <h:dataTable value="#{coffeeOrderBean.details}" var="details">
+
+            <h:column>
+                <f:facet name="header">Details</f:facet>
+                #{details}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Update</f:facet>
+                <h:commandButton value="update" action="#{coffeeOrderBean.prepareOrderToUpdate}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Delete</f:facet>
+                <h:commandButton value="delete" action="#{coffeeOrderBean.prepareOrderToDelete}"/>
+            </h:column>
+
+        </h:dataTable>
+    </h:form>
+
+    <h:form>
+        <h:commandButton action="#{coffeeOrderBean.prepareOrderToAdd}" value="Add order"/>
+        <h:commandButton value="back to main" action="index"/>
+    </h:form>
+
+</h:body>
+
+
+</html>

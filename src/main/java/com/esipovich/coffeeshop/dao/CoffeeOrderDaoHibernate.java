@@ -12,11 +12,15 @@ public class CoffeeOrderDaoHibernate implements CoffeeOrderDao{
     public void save(CoffeeOrder coffeeOrder) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        if (coffeeOrder.getId() == 0){
-            session.persist(coffeeOrder);
-        }else {
-            session.update(coffeeOrder);
-        }
+        session.persist(coffeeOrder);
+        session.getTransaction().commit();
+    }
+
+    @Override
+    public void update(CoffeeOrder coffeeOrder) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.update(coffeeOrder);
         session.getTransaction().commit();
     }
 

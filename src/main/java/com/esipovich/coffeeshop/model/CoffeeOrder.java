@@ -1,36 +1,23 @@
 package com.esipovich.coffeeshop.model;
 
 import com.esipovich.coffeeshop.util.DateTimeUtil;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "coffeeorder")
 public class CoffeeOrder {
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "coffeeKind")
     private String coffeeKind;
 
-    @Column(name = "quantity")
     private double quantity;
 
-    @Column(name = "cost")
     private double cost;
 
-    @Column(name = "deliveryTimeFrom")
     @Convert(converter = DateTimeUtil.class)
-    private LocalDateTime deliveryTimeFrom;
+    private String  deliveryTimeFrom;
 
-    @Column(name = "deliveryTimeTo")
     @Convert(converter = DateTimeUtil.class)
-    private LocalDateTime deliveryTimeTo;
+    private String deliveryTimeTo;
 
     public CoffeeOrder() {
     }
@@ -41,7 +28,7 @@ public class CoffeeOrder {
         this.cost = cost;
     }
 
-    public CoffeeOrder(String coffeeKind, double quantity, double cost, LocalDateTime deliveryTimeFrom, LocalDateTime deliveryTimeTo) {
+    public CoffeeOrder(String coffeeKind, double quantity, double cost, String deliveryTimeFrom, String deliveryTimeTo) {
         this.coffeeKind = coffeeKind;
         this.quantity = quantity;
         this.cost = cost;
@@ -81,19 +68,19 @@ public class CoffeeOrder {
         this.cost = cost;
     }
 
-    public LocalDateTime getDeliveryTimeFrom() {
+    public String getDeliveryTimeFrom() {
         return deliveryTimeFrom;
     }
 
-    public void setDeliveryTimeFrom(LocalDateTime deliveryTimeFrom) {
+    public void setDeliveryTimeFrom(String deliveryTimeFrom) {
         this.deliveryTimeFrom = deliveryTimeFrom;
     }
 
-    public LocalDateTime getDeliveryTimeTo() {
+    public String getDeliveryTimeTo() {
         return deliveryTimeTo;
     }
 
-    public void setDeliveryTimeTo(LocalDateTime deliveryTimeTo) {
+    public void setDeliveryTimeTo(String deliveryTimeTo) {
         this.deliveryTimeTo = deliveryTimeTo;
     }
 
@@ -110,7 +97,6 @@ public class CoffeeOrder {
         if (!coffeeKind.equals(that.coffeeKind)) return false;
         if (!deliveryTimeFrom.equals(that.deliveryTimeFrom)) return false;
         return deliveryTimeTo.equals(that.deliveryTimeTo);
-
     }
 
     @Override
@@ -135,4 +121,5 @@ public class CoffeeOrder {
                 (deliveryTimeFrom == null ? "pickup" : "from " + deliveryTimeFrom +
                         " to " + deliveryTimeTo);
     }
+
 }

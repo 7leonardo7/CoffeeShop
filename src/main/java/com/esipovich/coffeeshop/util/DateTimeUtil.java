@@ -3,17 +3,21 @@ package com.esipovich.coffeeshop.util;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 @Converter(autoApply = true)
-public class DateTimeUtil implements AttributeConverter<LocalDateTime, Timestamp>{
+public class DateTimeUtil implements AttributeConverter<String, Timestamp>{
+    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+
     @Override
-    public Timestamp convertToDatabaseColumn(LocalDateTime localDateTime) {
-        return Timestamp.valueOf(localDateTime);
+    public Timestamp convertToDatabaseColumn(String dateTime) {
+        return Timestamp.valueOf(dateTime);
     }
 
     @Override
-    public LocalDateTime convertToEntityAttribute(Timestamp timestamp) {
-        return timestamp.toLocalDateTime();
+    public String convertToEntityAttribute(Timestamp timestamp) {
+        return dateFormat.format(timestamp);
     }
 }
