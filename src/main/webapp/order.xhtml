@@ -20,31 +20,49 @@
         <h2>Change order</h2>
     </c:if>
 
+    <h:form>
     <h:panelGrid columns="2">
+
         <c:if test="#{coffeeOrderBean.order.id != 0}">
             ID: <h:inputText id="id" readonly="true" value="#{coffeeOrderBean.order.id}" disabled="true"/>
         </c:if>
 
         Coffee Kind:
 
-        <h:selectOneMenu id="coffeeKind" value="#{coffeeOrderBean.order.coffeeKind}">
-            <f:selectItems value="#{coffeeOrderBean.coffeeKindsList()}"/>
-        </h:selectOneMenu>
 
-        Delivery: <h:selectOneRadio id="delivery" value="#{coffeeOrderBean.delivery}" onchange="">
-            <f:selectItem itemValue="1" itemLabel="pickup"/>
-            <f:selectItem itemValue="2" itemLabel="express (1$)"/>
+            <h:selectOneMenu id="coffeeKind" value="#{coffeeOrderBean.order.coffeeKind}">
+                <f:selectItems value="#{coffeeOrderBean.coffeeKindsList()}"/>
+                <f:ajax execute="@this" render="cost" listener="#{coffeeOrderBean.countCost()}"/>
+            </h:selectOneMenu>
+
+
+        Delivery:
+
+
+        <h:selectOneRadio id="delivery" value="#{coffeeOrderBean.delivery}">
+            <f:selectItem itemValue="0" itemLabel="pickup"/>
+            <f:selectItem itemValue="1" itemLabel="express (1$)"/>
+            <f:ajax execute="@this" render="cost" listener="#{coffeeOrderBean.countCost()}"/>
         </h:selectOneRadio>
 
-        Quantity: <h:inputText id="quantity" value="#{coffeeOrderBean.order.quantity}"/>
+
+
+        Quantity:
+
+        <h:inputText id="quantity" value="#{coffeeOrderBean.order.quantity}">
+            <f:ajax execute="@this" render="cost" listener="#{coffeeOrderBean.countCost()}"/>
+        </h:inputText>
 
 
         Cost: <h:inputText id="cost" value="#{coffeeOrderBean.order.cost}" readonly="true"/>
 
-
     </h:panelGrid>
+    </h:form>
 
 
+    <h:form>
+        <h:commandButton value="order"/>
+    </h:form>
 
     <h:form>
         <h:commandButton value="back to main" action="index"/>

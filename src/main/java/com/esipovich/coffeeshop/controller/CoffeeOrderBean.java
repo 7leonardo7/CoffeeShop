@@ -19,7 +19,7 @@ public class CoffeeOrderBean {
     private CoffeeOrder order;
     private DataModel orderList;
     private CoffeeOrderDao orderDao;
-    private int delivery = 1;
+    private String delivery = "1";
 
     public CoffeeOrderBean() {
     }
@@ -29,11 +29,11 @@ public class CoffeeOrderBean {
         orderDao = new CoffeeOrderDaoHibernate();
     }
 
-    public int getDelivery() {
+    public String getDelivery() {
         return delivery;
     }
 
-    public void setDelivery(int delivery) {
+    public void setDelivery(String delivery) {
         this.delivery = delivery;
     }
 
@@ -107,4 +107,11 @@ public class CoffeeOrderBean {
     public List coffeeKindsList(){
         return Coffee.getCoffeeKinds();
     }
+
+    public double countCost(){
+        double cost = Coffee.getCoffeePrice(order.getCoffeeKind()) * order.getQuantity() + Double.valueOf(delivery);
+        order.setCost(cost);
+        return cost;
+    }
+
 }

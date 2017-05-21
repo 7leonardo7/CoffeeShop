@@ -6,13 +6,15 @@ public class Coffee {
     private static Map<String, Double> coffeePrices = new HashMap<>();
 
     static {
-        coffeePrices.put("Americano", 15.00);
-        coffeePrices.put("Espresso", 10.00);
-        coffeePrices.put("Latte", 11.00);
-        coffeePrices.put("Macchiato", 12.50);
-        coffeePrices.put("Mocha", 8.00);
-        coffeePrices.put("Lungo", 10.20);
+        coffeePrices.put("americano", 15.00);
+        coffeePrices.put("espresso", 10.00);
+        coffeePrices.put("latte", 11.00);
+        coffeePrices.put("macchiato", 12.50);
+        coffeePrices.put("mocha", 8.00);
+        coffeePrices.put("lungo", 10.20);
         coffeePrices.put("3 in 1", 5.50);
+        coffeePrices.put("capuchino", 6.50);
+        coffeePrices.put("melicano", 7.80);
     }
 
     public static Map<String, Double> getCoffeePrices() {
@@ -24,6 +26,6 @@ public class Coffee {
     }
 
     public static double getCoffeePrice(String coffeeKind){
-        return coffeePrices.get(coffeeKind);
+        return coffeeKind == null ? 0 : coffeePrices.get(coffeeKind);
     }
 }
