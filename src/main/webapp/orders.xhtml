@@ -8,34 +8,74 @@
 
 <h:head>
     <title>Orders</title>
+
+    <style type="text/css">
+        .table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: auto;
+            border-spacing: 0;
+            border: 1px solid black;
+        }
+        .table th,
+        .table td {
+            border: 1px black;
+            padding: 2px;
+            text-align: center;
+        }
+        .table th {
+            background-color: #ddd;
+            color: #BB0000;
+            border-bottom: 2px solid #000;
+        }
+        .table tr.odd {
+            background-color: aliceblue;
+        }
+        .table tr.odd td {
+            border-top: 1px solid #ccc;
+        }
+        .table tr.even {
+            background-color: #FBFBFB;
+        }
+        .table tr.even td {
+            border-top: 1px solid #BBEEEE;
+        }
+
+    </style>
+
 </h:head>
 
 <h:body>
 
     <h:form>
-        <h:dataTable value="#{coffeeOrderBean.details}" var="details">
+        <h:dataTable styleClass="table"
+                     rowClasses="odd, even"
+                     columnClasses="details"
+                     value="#{coffeeOrderBean.listOfOrders}" var="order">
 
             <h:column>
                 <f:facet name="header">Details</f:facet>
-                #{details}
+                #{order.toString()}
             </h:column>
 
             <h:column>
                 <f:facet name="header">Update</f:facet>
-                <h:commandButton value="update" action="#{coffeeOrderBean.prepareOrderToUpdate}"/>
+                <h:commandButton value="update" action="#{coffeeOrderBean.prepareOrderToUpdate()}"/>
             </h:column>
 
             <h:column>
                 <f:facet name="header">Delete</f:facet>
-                <h:commandButton value="delete" action="#{coffeeOrderBean.prepareOrderToDelete}"/>
+                <h:commandButton value="delete" action="#{coffeeOrderBean.prepareOrderToDelete()}"/>
             </h:column>
 
         </h:dataTable>
     </h:form>
 
+    <h:outputText value="#{coffeeOrderBean.orderStatus}"/>
+
     <h:form>
-        <h:commandButton action="#{coffeeOrderBean.prepareOrderToAdd}" value="Add order"/>
-        <h:commandButton value="back to main" action="index"/>
+        <h:commandButton action="#{coffeeOrderBean.prepareOrderToAdd()}" value="add order"/>
+        <h:commandButton value="back to main" action="#{coffeeOrderBean.backToMain()}"/>
     </h:form>
 
 </h:body>

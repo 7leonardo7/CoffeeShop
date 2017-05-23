@@ -1,7 +1,7 @@
 package com.esipovich.coffeeshop.model;
 
 import com.esipovich.coffeeshop.util.DateTimeUtil;
-import javax.persistence.*;
+import java.util.Date;
 
 public class CoffeeOrder {
 
@@ -13,11 +13,11 @@ public class CoffeeOrder {
 
     private double cost;
 
-    @Convert(converter = DateTimeUtil.class)
-    private String  deliveryTimeFrom;
+    //@Convert(converter = DateTimeUtil.class)
+    private Date deliveryTimeFrom;
 
-    @Convert(converter = DateTimeUtil.class)
-    private String deliveryTimeTo;
+    //@Convert(converter = DateTimeUtil.class)
+    private Date deliveryTimeTo;
 
     public CoffeeOrder() {
     }
@@ -28,7 +28,7 @@ public class CoffeeOrder {
         this.cost = cost;
     }
 
-    public CoffeeOrder(String coffeeKind, double quantity, double cost, String deliveryTimeFrom, String deliveryTimeTo) {
+    public CoffeeOrder(String coffeeKind, double quantity, double cost, Date deliveryTimeFrom, Date deliveryTimeTo) {
         this.coffeeKind = coffeeKind;
         this.quantity = quantity;
         this.cost = cost;
@@ -68,19 +68,19 @@ public class CoffeeOrder {
         this.cost = cost;
     }
 
-    public String getDeliveryTimeFrom() {
+    public Date getDeliveryTimeFrom() {
         return deliveryTimeFrom;
     }
 
-    public void setDeliveryTimeFrom(String deliveryTimeFrom) {
+    public void setDeliveryTimeFrom(Date deliveryTimeFrom) {
         this.deliveryTimeFrom = deliveryTimeFrom;
     }
 
-    public String getDeliveryTimeTo() {
+    public Date getDeliveryTimeTo() {
         return deliveryTimeTo;
     }
 
-    public void setDeliveryTimeTo(String deliveryTimeTo) {
+    public void setDeliveryTimeTo(Date deliveryTimeTo) {
         this.deliveryTimeTo = deliveryTimeTo;
     }
 
@@ -97,6 +97,7 @@ public class CoffeeOrder {
         if (!coffeeKind.equals(that.coffeeKind)) return false;
         if (!deliveryTimeFrom.equals(that.deliveryTimeFrom)) return false;
         return deliveryTimeTo.equals(that.deliveryTimeTo);
+
     }
 
     @Override
@@ -116,10 +117,11 @@ public class CoffeeOrder {
 
     @Override
     public String toString() {
-        return "Kind: " + coffeeKind + ", quantity: "
-                + quantity + "g., total cost: + " + cost + "$. Delivery: " +
-                (deliveryTimeFrom == null ? "pickup" : "from " + deliveryTimeFrom +
-                        " to " + deliveryTimeTo);
+        return "Kind: " + coffeeKind + ", quantity: " + quantity +
+               " g., \nDelivery: " + (deliveryTimeFrom == null ? "pickup" : "from " +
+                DateTimeUtil.convertDateToString(deliveryTimeFrom) + " to " +
+                DateTimeUtil.convertDateToString(deliveryTimeTo)) +
+                "\ntotal cost: " + cost + "$";
     }
 
 }

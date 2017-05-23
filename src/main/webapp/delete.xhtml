@@ -4,22 +4,57 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:head>
     <title>Delete order</title>
 </h:head>
 
 <h:body>
     <h3>Confirm deletion</h3>
+
+    <h:panelGrid columns="2">
+
+        ID:
+        <h:outputText value="#{coffeeOrderBean.order.id}"/>
+
+        Coffee Kind:
+        <h:outputText value="#{coffeeOrderBean.order.coffeeKind}"/>
+
+        <c:if test="#{coffeeOrderBean.delivery == 1}">
+            From:
+            <h:outputText value="#{coffeeOrderBean.order.deliveryTimeFrom}">
+                <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
+            </h:outputText>
+            To:
+            <h:outputText value="#{coffeeOrderBean.order.deliveryTimeTo}">
+                <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
+            </h:outputText>
+        </c:if>
+
+        <c:if test="#{coffeeOrderBean.delivery == 0}">
+            Delivery:
+            <h:outputText value="pickup"/>
+        </c:if>
+
+        Quantity:
+        <h:outputText value="#{coffeeOrderBean.order.quantity}"/>
+
+        Total cost:
+        <h:outputText value="#{coffeeOrderBean.order.cost}"/>
+
+    </h:panelGrid>
+
+    <h:form>
+        <h:commandButton value="delete" action="#{coffeeOrderBean.deleteOrder()}"/>
+    </h:form>
+
+    <h:form>
+        <h:commandButton value="back to main" action="#{coffeeOrderBean.backToMain()}"/>
+    </h:form>
+
+    <h:form>
+        <h:commandButton value="back to list" action="#{coffeeOrderBean.orderList}"/>
+    </h:form>
 </h:body>
-
-
-<h:form>
-    <h:commandButton value="back to main" action="index"/>
-</h:form>
-
-<h:form>
-    <h:commandButton value="back to list" action="#{coffeeOrderBean.orderList}"/>
-</h:form>
 
 </html>

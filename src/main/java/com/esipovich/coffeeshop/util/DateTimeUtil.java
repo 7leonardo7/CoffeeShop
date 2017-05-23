@@ -1,23 +1,25 @@
 package com.esipovich.coffeeshop.util;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
-import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
-@Converter(autoApply = true)
-public class DateTimeUtil implements AttributeConverter<String, Timestamp>{
+public class DateTimeUtil{
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-
-    @Override
-    public Timestamp convertToDatabaseColumn(String dateTime) {
-        return Timestamp.valueOf(dateTime);
+    public static Date convertStringToDate(String dateString) {
+        Date parsedDate = null;
+        try{
+            parsedDate = dateFormat.parse(dateString);
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+        return parsedDate;
     }
 
-    @Override
-    public String convertToEntityAttribute(Timestamp timestamp) {
-        return dateFormat.format(timestamp);
+    public static String convertDateToString(Date date) {
+        return dateFormat.format(date);
     }
+
 }

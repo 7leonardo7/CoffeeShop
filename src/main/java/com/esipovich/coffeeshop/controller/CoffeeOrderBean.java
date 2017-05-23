@@ -4,12 +4,17 @@ import com.esipovich.coffeeshop.dao.CoffeeOrderDao;
 import com.esipovich.coffeeshop.dao.CoffeeOrderDaoHibernate;
 import com.esipovich.coffeeshop.model.CoffeeOrder;
 import com.esipovich.coffeeshop.util.Coffee;
+import com.esipovich.coffeeshop.util.DateTimeUtil;
+import com.esipovich.coffeeshop.util.FacesUtil;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ManagedBean
@@ -19,7 +24,7 @@ public class CoffeeOrderBean {
     private CoffeeOrder order;
     private DataModel orderList;
     private CoffeeOrderDao orderDao;
-    private String delivery = "1";
+    private String delivery, orderStatus;
 
     public CoffeeOrderBean() {
     }
@@ -39,8 +44,10 @@ public class CoffeeOrderBean {
 
     @SuppressWarnings("unchecked")
     public DataModel<CoffeeOrder> getListOfOrders(){
-        List<CoffeeOrder> orders = orderDao.getAll();
-        orderList = new ListDataModel<>(orders);
+        if(orderList == null) {
+            List<CoffeeOrder> orders = orderDao.getAll();
+            orderList = new ListDataModel<>(orders);
+        }
         return orderList;
     }
 
@@ -52,27 +59,38 @@ public class CoffeeOrderBean {
         this.order = order;
     }
 
-    public List<String> getDetails() {
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    /*public List<String> getDetails() {
         List<String> ordersDetails = new ArrayList<>();
         for(CoffeeOrder order : orderDao.getAll()) {
             ordersDetails.add(order.toString());
         }
         return ordersDetails;
-    }
+    }*/
 
     public String addOrder(){
         orderDao.save(order);
-        return "orders";
+        orderStatus = "The order is accepted";
+        return orderList();
     }
 
     public String updateOrder(){
         orderDao.update(order);
-        return "orders";
+        orderStatus = "The order was successfully changed";
+        return orderList();
     }
 
     public String deleteOrder(){
         orderDao.delete(order);
-        return "orders";
+        orderStatus = "The order was successfully deleted";
+        return orderList();
     }
 
     public String prepareOrderToAdd(){
@@ -84,6 +102,9 @@ public class CoffeeOrderBean {
     //то закомментировать order = (CoffeeOrder)(orderList.getRowData());
     public String prepareOrderToUpdate(){
         order = (CoffeeOrder)(orderList.getRowData());
+        System.out.println("prepare to upd: " + order.getDeliveryTimeFrom() + " " + order.getDeliveryTimeTo());
+        delivery = order.getDeliveryTimeFrom() == null ? "0" : "1";
+        System.out.println("delivery after get order: " + delivery);
         return "order";
     }
 
@@ -112,6 +133,23 @@ public class CoffeeOrderBean {
         double cost = Coffee.getCoffeePrice(order.getCoffeeKind()) * order.getQuantity() + Double.valueOf(delivery);
         order.setCost(cost);
         return cost;
+    }
+
+    public String backToMain(){
+        orderStatus = "";
+        return "index";
+    }
+
+    //подумать как сделать по-другому
+    public void setEmptyTimeIfPickup(){
+        if("0".equals(delivery)) {
+            order.setDeliveryTimeFrom(null);
+            order.setDeliveryTimeTo(null);
+        }
+    }
+
+    public void showTime(){
+        System.out.println(order.getDeliveryTimeFrom());
     }
 
 }

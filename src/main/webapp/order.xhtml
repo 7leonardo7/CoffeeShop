@@ -8,6 +8,29 @@
 
 <h:head>
     <title>Order info</title>
+    <script type="text/javascript">
+        function validateDate(){
+            var startDate = document.getElementById("startDate");
+            var endDate = document.getElementById("endDate");
+
+            if(startDate == null || endDate == null){
+                alert("Please, fill date fields!")
+            }
+
+            if(startDate > endDate){
+                alert("Start date cannot be more than end date!")
+            }
+
+        }
+    </script>
+
+    <style type="text/css">
+        table{
+            margin: auto;
+            border-color: black;
+        }
+    </style>
+
 </h:head>
 
 <h:body>
@@ -20,13 +43,13 @@
         <h2>Change order</h2>
     </c:if>
 
-    <h:form>
-    <h:panelGrid columns="2">
+    <h:form id="form">
+    <h:panelGrid styleClass="table" columns="2">
 
         <c:if test="#{coffeeOrderBean.order.id != 0}">
             ID: <h:inputText id="id" readonly="true" value="#{coffeeOrderBean.order.id}" disabled="true"/>
         </c:if>
-
+        <!--ajax за пределы-->
         Coffee Kind:
 
 
@@ -42,15 +65,35 @@
         <h:selectOneRadio id="delivery" value="#{coffeeOrderBean.delivery}">
             <f:selectItem itemValue="0" itemLabel="pickup"/>
             <f:selectItem itemValue="1" itemLabel="express (1$)"/>
+            <f:ajax execute="@this" render="form" listener="#{coffeeOrderBean.setEmptyTimeIfPickup()}"/>
             <f:ajax execute="@this" render="cost" listener="#{coffeeOrderBean.countCost()}"/>
         </h:selectOneRadio>
 
+        <c:if test="#{coffeeOrderBean.delivery == 1}">
+            From
 
+            <h:inputText id="startDate" value="#{coffeeOrderBean.order.deliveryTimeFrom}" required="true">
+                <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
+                <f:ajax execute="@this" render="form"/>
+            </h:inputText>
+
+            To
+
+            <h:inputText id="endDate" value="#{coffeeOrderBean.order.deliveryTimeTo}" required="true">
+                <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
+                <f:ajax execute="@this" render="form"/>
+            </h:inputText>
+
+
+            <h:message for="startDate" style="color:red"/>
+
+        </c:if>
 
         Quantity:
 
-        <h:inputText id="quantity" value="#{coffeeOrderBean.order.quantity}">
-            <f:ajax execute="@this" render="cost" listener="#{coffeeOrderBean.countCost()}"/>
+        <h:inputText id="quantity" value="#{coffeeOrderBean.order.quantity}" required="true" requiredMessage="Quantity is required!">
+            <f:validator validatorId="com.esipovich.coffeeshop.util.validator.QuantityValidator"/>
+            <f:ajax execute="@this" render="cost quantityMessage" listener="#{coffeeOrderBean.countCost()}"/>
         </h:inputText>
 
 
@@ -59,17 +102,23 @@
     </h:panelGrid>
     </h:form>
 
+    <h:message id="quantityMessage" for="quantity" style="color:red"/>
 
     <h:form>
-        <h:commandButton value="order"/>
+        <c:if test="#{coffeeOrderBean.order.id == 0}">
+            <h:commandButton value="add order" action="#{coffeeOrderBean.addOrder()}"/>
+        </c:if>
+        <c:if test="#{coffeeOrderBean.order.id != 0}">
+            <h:commandButton value="update order" action="#{coffeeOrderBean.updateOrder()}"/>
+        </c:if>
     </h:form>
 
     <h:form>
-        <h:commandButton value="back to main" action="index"/>
+        <h:commandButton value="back to main" action="#{coffeeOrderBean.backToMain()}" onclick="validateDate()"/>
     </h:form>
 
     <h:form>
-        <h:commandButton value="back to list" action="#{coffeeOrderBean.orderList}"/>
+        <h:commandButton value="back to list" action="#{coffeeOrderBean.orderList}" onclick="validateDate()"/>
     </h:form>
 
 </h:body>
