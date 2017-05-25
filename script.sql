@@ -1,3 +1,5 @@
+CREATE SCHEMA `coffeeshop` DEFAULT CHARACTER SET utf8;
+
 CREATE TABLE `coffeeshop`.`coffeeorder` (
   
 `id` INT NOT NULL AUTO_INCREMENT,
@@ -13,3 +15,14 @@ CREATE TABLE `coffeeshop`.`coffeeorder` (
 `deliveryTimeTo` DATETIME NULL,
   
 PRIMARY KEY (`id`));
+
+
+INSERT INTO `coffeeshop`.`coffeeorder` (`coffeeKind`, `quantity`, `cost`) VALUES ('espresso', '155', '1550');
+
+INSERT INTO `coffeeshop`.`coffeeorder` (`coffeeKind`, `quantity`, `cost`, `deliveryTimeFrom`, `deliveryTimeTo`) 
+VALUES ('lungo', '112', '1143.4', '2017-05-24 17:00', '2017-05-24 18:00');
+
+INSERT INTO `coffeeshop`.`coffeeorder` (`coffeeKind`, `quantity`, `cost`) VALUES ('3 in 1', '100', '550');
+
+INSERT INTO `coffeeshop`.`coffeeorder` (`coffeeKind`, `quantity`, `cost`, `deliveryTimeFrom`, `deliveryTimeTo`) 
+VALUES ('macchiato', '220', '2751', '2017-05-25 12:10', '2017-05-25 16:30');
