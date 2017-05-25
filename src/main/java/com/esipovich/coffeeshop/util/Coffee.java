@@ -17,10 +17,6 @@ public class Coffee {
         coffeePrices.put("melicano", 7.80);
     }
 
-    public static Map<String, Double> getCoffeePrices() {
-        return coffeePrices;
-    }
-
     public static List getCoffeeKinds(){
         return new ArrayList<>(coffeePrices.keySet());
     }

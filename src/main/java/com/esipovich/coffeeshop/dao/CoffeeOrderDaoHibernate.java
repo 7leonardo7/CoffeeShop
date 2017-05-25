@@ -3,7 +3,6 @@ package com.esipovich.coffeeshop.dao;
 import com.esipovich.coffeeshop.model.CoffeeOrder;
 import com.esipovich.coffeeshop.util.HibernateUtil;
 import org.hibernate.Session;
-
 import java.util.List;
 
 public class CoffeeOrderDaoHibernate implements CoffeeOrderDao{
@@ -30,15 +29,6 @@ public class CoffeeOrderDaoHibernate implements CoffeeOrderDao{
         session.beginTransaction();
         session.delete(coffeeOrder);
         session.getTransaction().commit();
-    }
-
-    @Override
-    public CoffeeOrder get(int id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-        CoffeeOrder coffeeOrder = (CoffeeOrder) session.get(CoffeeOrder.class, id);
-        session.getTransaction().commit();
-        return coffeeOrder;
     }
 
     @Override

@@ -7,54 +7,74 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:head>
     <title>Delete order</title>
+
+    <!-- css to file-->
+    <style type="text/css">
+        .buttons{
+            margin: auto;
+            padding: 5px;
+            border-spacing: 10px;
+        }
+        .details{
+            width: 300px;
+            margin: auto;
+            border: 1px solid black;
+            border-spacing: 5px;
+            border-collapse: collapse;
+        }
+    </style>
 </h:head>
 
 <h:body>
-    <h3>Confirm deletion</h3>
 
-    <h:panelGrid columns="2">
+    <f:view locale="#{coffeeOrderBean.locale}">
 
-        ID:
+    <h3 align="center">#{msg['confirm']}</h3>
+
+    <h:panelGrid columns="2" styleClass="details">
+
+        #{msg['id']}
         <h:outputText value="#{coffeeOrderBean.order.id}"/>
 
-        Coffee Kind:
+        #{msg['kind']}
         <h:outputText value="#{coffeeOrderBean.order.coffeeKind}"/>
 
         <c:if test="#{coffeeOrderBean.delivery == 1}">
-            From:
+            #{msg['from']}
             <h:outputText value="#{coffeeOrderBean.order.deliveryTimeFrom}">
                 <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
             </h:outputText>
-            To:
+            #{msg['to']}
             <h:outputText value="#{coffeeOrderBean.order.deliveryTimeTo}">
                 <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
             </h:outputText>
         </c:if>
 
         <c:if test="#{coffeeOrderBean.delivery == 0}">
-            Delivery:
+            #{msg['delivery']}
             <h:outputText value="pickup"/>
         </c:if>
 
-        Quantity:
+        #{msg['quantity']}
         <h:outputText value="#{coffeeOrderBean.order.quantity}"/>
 
-        Total cost:
+        #{msg['cost']}
         <h:outputText value="#{coffeeOrderBean.order.cost}"/>
 
     </h:panelGrid>
 
     <h:form>
-        <h:commandButton value="delete" action="#{coffeeOrderBean.deleteOrder()}"/>
+        <h:panelGrid columns="3" styleClass="buttons">
+        <h:commandButton value="#{msg['delete']}" action="#{coffeeOrderBean.deleteOrder()}"/>
+
+        <h:commandButton value="#{msg['backMain']}" action="#{coffeeOrderBean.backToMain()}"/>
+
+        <h:commandButton value="#{msg['backList']}" action="#{coffeeOrderBean.backToList()}"/>
+        </h:panelGrid>
     </h:form>
 
-    <h:form>
-        <h:commandButton value="back to main" action="#{coffeeOrderBean.backToMain()}"/>
-    </h:form>
+    </f:view>
 
-    <h:form>
-        <h:commandButton value="back to list" action="#{coffeeOrderBean.orderList}"/>
-    </h:form>
 </h:body>
 
 </html>

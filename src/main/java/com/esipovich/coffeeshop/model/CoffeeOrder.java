@@ -13,27 +13,11 @@ public class CoffeeOrder {
 
     private double cost;
 
-    //@Convert(converter = DateTimeUtil.class)
     private Date deliveryTimeFrom;
 
-    //@Convert(converter = DateTimeUtil.class)
     private Date deliveryTimeTo;
 
     public CoffeeOrder() {
-    }
-
-    public CoffeeOrder(String coffeeKind, double quantity, double cost) {
-        this.coffeeKind = coffeeKind;
-        this.quantity = quantity;
-        this.cost = cost;
-    }
-
-    public CoffeeOrder(String coffeeKind, double quantity, double cost, Date deliveryTimeFrom, Date deliveryTimeTo) {
-        this.coffeeKind = coffeeKind;
-        this.quantity = quantity;
-        this.cost = cost;
-        this.deliveryTimeFrom = deliveryTimeFrom;
-        this.deliveryTimeTo = deliveryTimeTo;
     }
 
     public int getId() {
@@ -114,14 +98,14 @@ public class CoffeeOrder {
         result = 31 * result + deliveryTimeTo.hashCode();
         return result;
     }
-
+    //не читаемо!
     @Override
     public String toString() {
-        return "Kind: " + coffeeKind + ", quantity: " + quantity +
-               " g., \nDelivery: " + (deliveryTimeFrom == null ? "pickup" : "from " +
+        return "KIND: " + coffeeKind + ", QUANTITY: " + quantity +
+               " g., DELIVERY: " + (deliveryTimeFrom == null ? "pickup" : "from " +
                 DateTimeUtil.convertDateToString(deliveryTimeFrom) + " to " +
                 DateTimeUtil.convertDateToString(deliveryTimeTo)) +
-                "\ntotal cost: " + cost + "$";
+                ",  TOTAL COST: " + cost + "$";
     }
 
 }

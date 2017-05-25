@@ -4,9 +4,6 @@ import com.esipovich.coffeeshop.dao.CoffeeOrderDao;
 import com.esipovich.coffeeshop.dao.CoffeeOrderDaoHibernate;
 import com.esipovich.coffeeshop.model.CoffeeOrder;
 import com.esipovich.coffeeshop.util.Coffee;
-import com.esipovich.coffeeshop.util.DateTimeUtil;
-import com.esipovich.coffeeshop.util.FacesUtil;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -14,8 +11,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @ManagedBean
 @SessionScoped
@@ -25,13 +22,19 @@ public class CoffeeOrderBean {
     private DataModel orderList;
     private CoffeeOrderDao orderDao;
     private String delivery, orderStatus;
-
-    public CoffeeOrderBean() {
-    }
+    //изначально при операции add на форме поле quantity = 0.0,
+    // если нажать add то exception,
+    //поэтому ввел минимальное значение по умолчанию
+    private static final double MIN_QUANTITY = 100;
+    private Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
 
     @PostConstruct
     public void init(){
         orderDao = new CoffeeOrderDaoHibernate();
+    }
+
+    public Locale getLocale() {
+        return locale;
     }
 
     public String getDelivery() {
@@ -40,15 +43,6 @@ public class CoffeeOrderBean {
 
     public void setDelivery(String delivery) {
         this.delivery = delivery;
-    }
-
-    @SuppressWarnings("unchecked")
-    public DataModel<CoffeeOrder> getListOfOrders(){
-        if(orderList == null) {
-            List<CoffeeOrder> orders = orderDao.getAll();
-            orderList = new ListDataModel<>(orders);
-        }
-        return orderList;
     }
 
     public CoffeeOrder getOrder() {
@@ -67,61 +61,64 @@ public class CoffeeOrderBean {
         this.orderStatus = orderStatus;
     }
 
-    /*public List<String> getDetails() {
-        List<String> ordersDetails = new ArrayList<>();
-        for(CoffeeOrder order : orderDao.getAll()) {
-            ordersDetails.add(order.toString());
-        }
-        return ordersDetails;
-    }*/
-
-    public String addOrder(){
-        orderDao.save(order);
-        orderStatus = "The order is accepted";
-        return orderList();
-    }
-
-    public String updateOrder(){
-        orderDao.update(order);
-        orderStatus = "The order was successfully changed";
-        return orderList();
-    }
-
-    public String deleteOrder(){
-        orderDao.delete(order);
-        orderStatus = "The order was successfully deleted";
-        return orderList();
+    @SuppressWarnings("unchecked")
+    //нужно чтобы получить объект из dataTable по нажатию update or delete
+    //не используя при этом params or attributes
+    public DataModel<CoffeeOrder> getListOfOrders(){
+        List<CoffeeOrder> orders = orderDao.getAll();
+        orderList = new ListDataModel<>(orders);
+        return orderList;
     }
 
     public String prepareOrderToAdd(){
         order = new CoffeeOrder();
+        delivery = "0";
+        order.setCoffeeKind(String.valueOf(Coffee.getCoffeeKinds().get(0)));
+        order.setQuantity(MIN_QUANTITY);
+        countCost();
         return "order";
+    }
+
+    public String addOrder(){
+        orderDao.save(order);
+        orderStatus = "The order is accepted";
+        return "orders";
     }
 
     //если использовать для передачи данных setPropertyActionListener на orders.xhtml,
     //то закомментировать order = (CoffeeOrder)(orderList.getRowData());
     public String prepareOrderToUpdate(){
         order = (CoffeeOrder)(orderList.getRowData());
-        System.out.println("prepare to upd: " + order.getDeliveryTimeFrom() + " " + order.getDeliveryTimeTo());
         delivery = order.getDeliveryTimeFrom() == null ? "0" : "1";
-        System.out.println("delivery after get order: " + delivery);
         return "order";
+    }
+
+    public String updateOrder(){
+        orderDao.update(order);
+        orderStatus = "The order was successfully changed";
+        return "orders";
     }
 
     //при использовании  c f:param можно передать id и по нему получить объект
     //CoffeeOrder
     //актуально, если на orders.xhtml использовать объект CoffeeOrder и выводить в
-    //таблице каждое его поле отдельно
+    //dataTable каждое его поле отдельно
     public String prepareOrderToDelete(){
         //String id = FacesUtil.getRequestParameter("id");
         //order = orderDao.get(Integer.valueOf(id));
         order = (CoffeeOrder)(orderList.getRowData());
+        delivery = order.getDeliveryTimeFrom() == null ? "0" : "1";
         return "delete";
     }
 
-    public String orderList() {
-        List<CoffeeOrder> orders = orderDao.getAll();
-        orderList = new ListDataModel<>(orders);
+    public String deleteOrder(){
+        orderDao.delete(order);
+        orderStatus = "The order was successfully deleted";
+        return "orders";
+    }
+
+    public String backToList(){
+        orderStatus = "";
         return "orders";
     }
 
@@ -129,12 +126,14 @@ public class CoffeeOrderBean {
         return Coffee.getCoffeeKinds();
     }
 
-    public double countCost(){
-        double cost = Coffee.getCoffeePrice(order.getCoffeeKind()) * order.getQuantity() + Double.valueOf(delivery);
+    public void countCost(){
+        double cost = Coffee.getCoffeePrice(
+                order.getCoffeeKind()) * order.getQuantity() +
+                Double.valueOf(delivery);
         order.setCost(cost);
-        return cost;
     }
 
+    //подумать насчет изменения статуса другим способом (не вызывая каждый раз метод)
     public String backToMain(){
         orderStatus = "";
         return "index";
@@ -148,8 +147,13 @@ public class CoffeeOrderBean {
         }
     }
 
-    public void showTime(){
-        System.out.println(order.getDeliveryTimeFrom());
+    public void changeLanguage(String language) {
+        locale = new Locale(language);
+        FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale(language));
     }
+
+    public void validateDate(FacesContext context, UIComponent component, Object value){
+    }
+
 
 }

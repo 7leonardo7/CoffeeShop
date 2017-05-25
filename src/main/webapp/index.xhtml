@@ -5,18 +5,50 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-    <title>Welcome to Coffee Shop!</title>
-</h:head>
+    <title>#{msg['title']}</title>
 
-    <h:outputText value="Welcome to Coffee Shop!"/>
+    <!-- css to file-->
+    <style type="text/css">
+        .hello{
+            font-size: 22px;
+            margin: auto;
+            align-content: center;
+        }
+        .buttons{
+            margin: auto;
+            padding: 5px;
+            border-spacing: 10px;
+            font-size: large;
+        }
+    </style>
+</h:head>
 
     <h:body>
 
+        <h:panelGrid styleClass="hello">
+            <h:outputText value="#{msg['greeting']}"/>
+        </h:panelGrid>
+
         <h:form>
-            <h:commandButton action="#{coffeeOrderBean.prepareOrderToAdd()}" value="Add order"/>
-            <h:commandButton action="#{coffeeOrderBean.orderList()}" value="All orders"/>
+            <h:panelGrid styleClass="hello" columns = "2">
+                <h:column>
+                    <h:commandButton action="#{coffeeOrderBean.changeLanguage('')}"
+                    value="English" image="resources/images/uk.png" />
+                </h:column>
+
+                <h:column>
+                    <h:commandButton action="#{coffeeOrderBean.changeLanguage('fr')}"
+                    value="French" image="resources/images/fr.png" />
+                </h:column>
+            </h:panelGrid>
         </h:form>
 
+        <h:form>
+            <h:panelGrid columns="2" styleClass="buttons">
+                <h:commandButton value="#{msg['add']}" action="#{coffeeOrderBean.prepareOrderToAdd()}"/>
+                <h:commandButton value="#{msg['list']}" action="orders"/>
+            </h:panelGrid>
+        </h:form>
 
     </h:body>
 

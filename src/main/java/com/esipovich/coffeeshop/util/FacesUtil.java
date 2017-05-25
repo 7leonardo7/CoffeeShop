@@ -3,6 +3,7 @@ package com.esipovich.coffeeshop.util;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+//для получения полей с jsf
 public class FacesUtil {
 
     public static String getActionAttribute(ActionEvent event, String name) {
