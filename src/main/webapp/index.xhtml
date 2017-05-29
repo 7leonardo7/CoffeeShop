@@ -7,7 +7,6 @@
 <h:head>
     <title>#{msg['title']}</title>
 
-    <!-- css to file-->
     <style type="text/css">
         .hello{
             font-size: 22px;
@@ -50,6 +49,9 @@
             </h:panelGrid>
         </h:form>
 
+        <h:panelGrid styleClass="buttons">
+            <h:outputText value="1$ = #{coffeeOrderBean.getExchangeRate()} BYN"/>
+        </h:panelGrid>
     </h:body>
 
 </html>

@@ -2,14 +2,12 @@ package com.esipovich.coffeeshop.controller;
 
 import com.esipovich.coffeeshop.dao.CoffeeOrderDao;
 import com.esipovich.coffeeshop.dao.CoffeeOrderDaoEclipseLink;
-import com.esipovich.coffeeshop.dao.CoffeeOrderDaoHibernate;
 import com.esipovich.coffeeshop.model.CoffeeOrder;
+import com.esipovich.coffeeshop.rest.ExchangeRate;
 import com.esipovich.coffeeshop.util.Coffee;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -164,6 +162,10 @@ public class CoffeeOrderBean {
             calendar.add(Calendar.HOUR, 1);
             order.setDeliveryTimeTo(calendar.getTime());
         }
+    }
+
+    public String getExchangeRate(){
+        return ExchangeRate.getExchangeRate();
     }
 
 

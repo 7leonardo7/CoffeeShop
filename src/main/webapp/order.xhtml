@@ -58,9 +58,11 @@
 
         <c:if test="#{coffeeOrderBean.order.id != 0}">
             #{msg['id']}
-            <h:inputText id="id" readonly="true" value="#{coffeeOrderBean.order.id}" disabled="true"/>
+            <h:inputText id="id" readonly="true"
+                         value="#{coffeeOrderBean.order.id}"
+                         disabled="true"
+                         styleClass="inputData"/>
         </c:if>
-        <!--ajax за пределы, локализовать метки-->
 
         #{msg['kind']}
         <h:selectOneMenu id="coffeeKind" value="#{coffeeOrderBean.order.coffeeKind}" styleClass="list">
@@ -78,28 +80,23 @@
 
 
             #{msg['from']}
-            <!-- не валидируется, если значение не правильное то просто не присваивается-->
-            <!-- если выбирать express и указать невалидную дату то стоимость считается неправильно на 1$-->
-            <!-- дата присваивается полю бина только после применения ajax, почему?-->
-            <!--<h:inputText id="startDate" value="#{coffeeOrderBean.order.deliveryTimeFrom}">
-                <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
-                <f:ajax execute="@this" render="form"/>
-            </h:inputText>-->
-
-            <p:calendar id="startDate" value="#{coffeeOrderBean.order.deliveryTimeFrom}" styleClass="dateTimeField"
+            <p:calendar id="startDate" value="#{coffeeOrderBean.order.deliveryTimeFrom}"
+                        styleClass="dateTimeField"
                         disabled="#{coffeeOrderBean.delivery == 0 ? true : false}"
                         pattern="yyyy-MM-dd HH:mm"
-                        maxdate="#{coffeeOrderBean.order.deliveryTimeTo}">
+                        maxdate="#{coffeeOrderBean.order.deliveryTimeTo}"
+                        maxHour="#{coffeeOrderBean.order.deliveryTimeTo.hours - 1}">
                 <p:ajax event="dateSelect" update="endDate"/>
             </p:calendar>
 
             #{msg['to']}
-            <p:calendar id="endDate" value="#{coffeeOrderBean.order.deliveryTimeTo}" styleClass="dateTimeField"
-                    disabled="#{coffeeOrderBean.delivery == 0 ? true : false}"
-                    pattern="yyyy-MM-dd HH:mm"
-                    mindate="#{coffeeOrderBean.order.deliveryTimeFrom}"
-                    minHour="#{coffeeOrderBean.order.deliveryTimeFrom.hours + 1}">
-            <p:ajax event="dateSelect" update="startDate"/>
+            <p:calendar id="endDate" value="#{coffeeOrderBean.order.deliveryTimeTo}"
+                        styleClass="dateTimeField"
+                        disabled="#{coffeeOrderBean.delivery == 0 ? true : false}"
+                        pattern="yyyy-MM-dd HH:mm"
+                        mindate="#{coffeeOrderBean.order.deliveryTimeFrom}"
+                        minHour="#{coffeeOrderBean.order.deliveryTimeFrom.hours + 1}">
+                <p:ajax event="dateSelect" update="startDate"/>
 
             </p:calendar>
 
