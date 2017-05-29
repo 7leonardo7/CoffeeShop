@@ -1,0 +1,12 @@
+.buttons{
+    margin: auto;
+    padding: 5px;
+    border-spacing: 10px;
+}
+.details{
+    width: 300px;
+    margin: auto;
+    border: 1px solid black;
+    border-spacing: 5px;
+    border-collapse: collapse;
+}

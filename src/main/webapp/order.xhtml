@@ -3,43 +3,13 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>Order info</title>
-
-    <!-- css to file-->
-    <style type="text/css">
-        .details{
-            margin: auto;
-            border: 1px solid black;
-            border-spacing: 5px;
-            border-collapse: collapse;
-        }
-        .buttons{
-            margin: auto;
-            padding: 5px;
-            border-spacing: 10px;
-        }
-        .list {
-            width: 180px;
-        }
-        .inputData{
-            width: 175px;
-        }
-        .messages{
-            margin: auto;
-            align-content: center;
-            color: red;
-        }
-        .dateTimeField{
-            font-size: small;
-        }
-
-    </style>
-
+    <title>#{msg['orderInfo']}</title>
+    <h:outputStylesheet library="css" name="order.css"/>
 </h:head>
 
 <h:body>
@@ -54,29 +24,29 @@
     </c:if>
 
     <h:form id="form">
-    <h:panelGrid styleClass="details" columns="2">
+        <h:panelGrid styleClass="details" columns="2">
 
-        <c:if test="#{coffeeOrderBean.order.id != 0}">
-            #{msg['id']}
-            <h:inputText id="id" readonly="true"
-                         value="#{coffeeOrderBean.order.id}"
-                         disabled="true"
-                         styleClass="inputData"/>
-        </c:if>
+            <c:if test="#{coffeeOrderBean.order.id != 0}">
+                #{msg['id']}
+                <h:inputText id="id" readonly="true"
+                             value="#{coffeeOrderBean.order.id}"
+                             disabled="true"
+                             styleClass="inputData"/>
+            </c:if>
 
-        #{msg['kind']}
-        <h:selectOneMenu id="coffeeKind" value="#{coffeeOrderBean.order.coffeeKind}" styleClass="list">
-            <f:selectItems value="#{coffeeOrderBean.coffeeKindsList()}"/>
-            <f:ajax execute="@this" render="cost" listener="#{coffeeOrderBean.countCost()}"/>
-        </h:selectOneMenu>
+            #{msg['kind']}
+            <h:selectOneMenu id="coffeeKind" value="#{coffeeOrderBean.order.coffeeKind}" styleClass="list">
+                <f:selectItems value="#{coffeeOrderBean.coffeeKindsList()}"/>
+                <f:ajax execute="@this" render="cost" listener="#{coffeeOrderBean.countCost()}"/>
+            </h:selectOneMenu>
 
-        #{msg['delivery']}
-        <h:selectOneRadio id="delivery" value="#{coffeeOrderBean.delivery}">
-            <f:selectItem itemValue="0" itemLabel="#{msg['pickup']}"/>
-            <f:selectItem itemValue="1" itemLabel="#{msg['express']} (1$)"/>
-            <f:ajax execute="@this" render="cost" listener="#{coffeeOrderBean.countCost()}"/>
-            <f:ajax execute="@this" render="startDate endDate" listener="#{coffeeOrderBean.setCurrentDateTime()}"/>
-        </h:selectOneRadio>
+            #{msg['delivery']}
+            <h:selectOneRadio id="delivery" value="#{coffeeOrderBean.delivery}">
+                <f:selectItem itemValue="0" itemLabel="#{msg['pickup']}"/>
+                <f:selectItem itemValue="1" itemLabel="#{msg['express']} (1$)"/>
+                <f:ajax execute="@this" render="cost" listener="#{coffeeOrderBean.countCost()}"/>
+                <f:ajax execute="@this" render="startDate endDate" listener="#{coffeeOrderBean.setCurrentDateTime()}"/>
+            </h:selectOneRadio>
 
 
             #{msg['from']}
@@ -85,7 +55,8 @@
                         disabled="#{coffeeOrderBean.delivery == 0 ? true : false}"
                         pattern="yyyy-MM-dd HH:mm"
                         maxdate="#{coffeeOrderBean.order.deliveryTimeTo}"
-                        maxHour="#{coffeeOrderBean.order.deliveryTimeTo.hours - 1}">
+                        maxHour="#{coffeeOrderBean.order.deliveryTimeTo.hours - 1}"
+                        required="true">
                 <p:ajax event="dateSelect" update="endDate"/>
             </p:calendar>
 
@@ -95,31 +66,26 @@
                         disabled="#{coffeeOrderBean.delivery == 0 ? true : false}"
                         pattern="yyyy-MM-dd HH:mm"
                         mindate="#{coffeeOrderBean.order.deliveryTimeFrom}"
-                        minHour="#{coffeeOrderBean.order.deliveryTimeFrom.hours + 1}">
+                        minHour="#{coffeeOrderBean.order.deliveryTimeFrom.hours + 1}"
+                        required="true">
                 <p:ajax event="dateSelect" update="startDate"/>
-
             </p:calendar>
 
+            #{msg['quantity']}
+            <h:inputText id="quantity" value="#{coffeeOrderBean.order.quantity}"
+                         required="true" requiredMessage="Quantity is required!"
+                         styleClass="inputData">
+                <f:validator validatorId="com.esipovich.coffeeshop.util.validator.QuantityValidator"/>
+                <f:ajax execute="@this" render="cost quantityMessage"
+                        listener="#{coffeeOrderBean.countCost()}"/>
+            </h:inputText>
 
+            #{msg['cost']}
+            <h:inputText id="cost" value="#{coffeeOrderBean.order.cost}" readonly="true"
+                    styleClass="inputData"/>
 
-
-
-
-        #{msg['quantity']}
-        <h:inputText id="quantity" value="#{coffeeOrderBean.order.quantity}"
-                     required="true" requiredMessage="Quantity is required!"
-                     styleClass="inputData">
-            <f:validator validatorId="com.esipovich.coffeeshop.util.validator.QuantityValidator"/>
-            <f:ajax execute="@this" render="cost quantityMessage" listener="#{coffeeOrderBean.countCost()}"/>
-        </h:inputText>
-
-        #{msg['cost']}
-        <h:inputText id="cost" value="#{coffeeOrderBean.order.cost}" readonly="true"
-                styleClass="inputData"/>
-
-    </h:panelGrid>
+        </h:panelGrid>
     </h:form>
-
 
     <h:panelGrid styleClass="messages">
         <h:message id="quantityMessage" for="quantity"/>
@@ -129,18 +95,21 @@
 
     <h:form>
         <h:panelGrid columns="3" styleClass="buttons">
-
             <c:if test="#{coffeeOrderBean.order.id == 0}">
-                <h:commandButton value="#{msg['add']}" action="#{coffeeOrderBean.addOrder()}"/>
+                <h:commandButton value="#{msg['add']}"
+                                 action="#{coffeeOrderBean.addOrder()}"/>
             </c:if>
 
             <c:if test="#{coffeeOrderBean.order.id != 0}">
-                <h:commandButton value="#{msg['update']}" action="#{coffeeOrderBean.updateOrder()}"/>
+                <h:commandButton value="#{msg['update']}"
+                                 action="#{coffeeOrderBean.updateOrder()}"/>
             </c:if>
 
-            <h:commandButton value="#{msg['backMain']}" action="#{coffeeOrderBean.backToMain()}"/>
+            <h:commandButton value="#{msg['backMain']}"
+                             action="#{coffeeOrderBean.backToMain()}"/>
 
-            <h:commandButton value="#{msg['backList']}" action="#{coffeeOrderBean.backToList()}"/>
+            <h:commandButton value="#{msg['backList']}"
+                             action="#{coffeeOrderBean.backToList()}"/>
         </h:panelGrid>
     </h:form>
  </f:view>

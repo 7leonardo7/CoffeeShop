@@ -1,0 +1,11 @@
+.hello{
+    font-size: 22px;
+    margin: auto;
+    align-content: center;
+}
+.buttons{
+    margin: auto;
+    padding: 5px;
+    border-spacing: 10px;
+    font-size: large;
+}

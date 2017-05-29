@@ -11,7 +11,7 @@ public class ExchangeRate {
     private static final String GET_URL =
             "http://www.nbrb.by/API/ExRates/Rates/145";
 
-    //можно ли вытянуть значение по имени поля
+    //поискать, можно ли вытянуть значение по имени поля
     public static String getExchangeRate(){
         StringBuilder response = new StringBuilder();
         try {

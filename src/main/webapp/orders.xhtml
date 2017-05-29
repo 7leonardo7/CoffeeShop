@@ -3,61 +3,18 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<!--css to file-->
 <h:head>
-    <title>Orders</title>
-
-    <!-- css to file-->
-    <style type="text/css">
-        .table {
-            width: 50%;
-            border-collapse: collapse;
-            margin: auto;
-            border-spacing: 0;
-            border: 1px solid black;
-        }
-        .table th,
-        .table td {
-            border: 1px black;
-            padding: 2px;
-            text-align: center;
-        }
-        .table th {
-            background-color: #ddd;
-            color: #BB0000;
-            border-bottom: 2px solid #000;
-        }
-        .table tr.odd {
-            background-color: aliceblue;
-        }
-        .table tr.odd td {
-            border-top: 1px solid #ccc;
-        }
-        .table tr.even td {
-            border-top: 1px solid #BBEEEE;
-        }
-        .buttons{
-            margin: auto;
-            padding: 5px;
-            border-spacing: 10px;
-        }
-        .message{
-            margin: auto;
-            align-content: center;
-        }
-    </style>
-
+    <title>#{msg['orders']}</title>
+    <h:outputStylesheet library="css" name="orders.css"/>
 </h:head>
 
     <h:body>
 
         <f:view locale="#{coffeeOrderBean.locale}">
 
-        <h2 align="center">List of orders</h2>
+        <h2 align="center">#{msg['listOrders']}</h2>
 
             <h:form>
                 <h:dataTable styleClass="table"
@@ -72,12 +29,14 @@
 
                     <h:column>
                         <f:facet name="header">#{msg['update']}</f:facet>
-                        <h:commandButton value="#{msg['update']}" action="#{coffeeOrderBean.prepareOrderToUpdate()}"/>
+                        <h:commandButton value="#{msg['update']}"
+                                         action="#{coffeeOrderBean.prepareOrderToUpdate()}"/>
                     </h:column>
 
                     <h:column>
                         <f:facet name="header">#{msg['delete']}</f:facet>
-                        <h:commandButton value="#{msg['delete']}" action="#{coffeeOrderBean.prepareOrderToDelete()}"/>
+                        <h:commandButton value="#{msg['delete']}"
+                                         action="#{coffeeOrderBean.prepareOrderToDelete()}"/>
                     </h:column>
 
                 </h:dataTable>
@@ -90,10 +49,14 @@
         <h:form>
             <h:panelGrid styleClass="buttons" columns="2">
                 <h:column>
-                    <h:commandButton styleClass="button" action="#{coffeeOrderBean.prepareOrderToAdd()}" value="#{msg['add']}"/>
+                    <h:commandButton styleClass="button"
+                                     action="#{coffeeOrderBean.prepareOrderToAdd()}"
+                                     value="#{msg['add']}"/>
                 </h:column>
                 <h:column>
-                    <h:commandButton styleClass="button" action="#{coffeeOrderBean.backToMain()}" value="#{msg['backMain']}" />
+                    <h:commandButton styleClass="button"
+                                     action="#{coffeeOrderBean.backToMain()}"
+                                     value="#{msg['backMain']}" />
                 </h:column>
             </h:panelGrid>
         </h:form>

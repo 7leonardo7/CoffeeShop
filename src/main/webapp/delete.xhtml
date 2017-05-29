@@ -3,30 +3,15 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core">
-<h:head>
-    <title>Delete order</title>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-    <!-- css to file-->
-    <style type="text/css">
-        .buttons{
-            margin: auto;
-            padding: 5px;
-            border-spacing: 10px;
-        }
-        .details{
-            width: 300px;
-            margin: auto;
-            border: 1px solid black;
-            border-spacing: 5px;
-            border-collapse: collapse;
-        }
-    </style>
+<h:head>
+    <title>#{msg['deleteOrder']}</title>
+    <h:outputStylesheet library="css" name="delete.css"/>
 </h:head>
 
 <h:body>
-
     <f:view locale="#{coffeeOrderBean.locale}">
 
     <h3 align="center">#{msg['confirm']}</h3>
@@ -40,19 +25,24 @@
         <h:outputText value="#{coffeeOrderBean.order.coffeeKind}"/>
 
         <c:if test="#{coffeeOrderBean.delivery == 1}">
+
             #{msg['from']}
             <h:outputText value="#{coffeeOrderBean.order.deliveryTimeFrom}">
                 <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
             </h:outputText>
+
             #{msg['to']}
             <h:outputText value="#{coffeeOrderBean.order.deliveryTimeTo}">
                 <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
             </h:outputText>
+
         </c:if>
 
         <c:if test="#{coffeeOrderBean.delivery == 0}">
+
             #{msg['delivery']}
             <h:outputText value="pickup"/>
+
         </c:if>
 
         #{msg['quantity']}

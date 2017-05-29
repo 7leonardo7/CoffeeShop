@@ -24,12 +24,11 @@ public class CoffeeOrderBean {
     private DataModel orderList;
     private CoffeeOrderDao orderDao;
     private String delivery, orderStatus;
-    private static final double MIN_QUANTITY = 100;
     private Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+    private static final double MIN_QUANTITY = 100;
 
     @PostConstruct
     public void init(){
-        //можно переключаться между hibernate/eclipselink
         orderDao = new CoffeeOrderDaoEclipseLink();
     }
 
@@ -80,7 +79,9 @@ public class CoffeeOrderBean {
     }
 
     public String addOrder(){
-        setEmptyTimeIfPickup();
+        if("0".equals(delivery)) {
+            setEmptyTime();
+        }
         orderDao.save(order);
         orderStatus = "The order is accepted";
         return "orders";
@@ -95,7 +96,9 @@ public class CoffeeOrderBean {
     }
 
     public String updateOrder(){
-        setEmptyTimeIfPickup();
+        if("0".equals(delivery)) {
+            setEmptyTime();
+        }
         orderDao.update(order);
         orderStatus = "The order was successfully changed";
         return "orders";
@@ -124,6 +127,11 @@ public class CoffeeOrderBean {
         return "orders";
     }
 
+    public String backToMain(){
+        orderStatus = "";
+        return "index";
+    }
+
     public List coffeeKindsList(){
         return Coffee.getCoffeeKinds();
     }
@@ -135,14 +143,7 @@ public class CoffeeOrderBean {
         order.setCost(cost);
     }
 
-    //подумать насчет изменения статуса другим способом (не вызывая каждый раз метод)
-    public String backToMain(){
-        orderStatus = "";
-        return "index";
-    }
-
-    //подумать как сделать по-другому
-    public void setEmptyTimeIfPickup(){
+    public void setEmptyTime(){
         if("0".equals(delivery)) {
             order.setDeliveryTimeFrom(null);
             order.setDeliveryTimeTo(null);
@@ -154,6 +155,8 @@ public class CoffeeOrderBean {
         FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale(language));
     }
 
+    //если доставка - задаю время по умолчанию
+    //с - текущее, по - текущее плюс час
     public void setCurrentDateTime(){
         if(order.getDeliveryTimeFrom() == null && order.getDeliveryTimeTo() == null) {
             Calendar calendar = Calendar.getInstance();
@@ -167,6 +170,5 @@ public class CoffeeOrderBean {
     public String getExchangeRate(){
         return ExchangeRate.getExchangeRate();
     }
-
 
 }

@@ -4,6 +4,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 //для получения полей с jsf
+//оставить для примера
 public class FacesUtil {
 
     public static String getActionAttribute(ActionEvent event, String name) {

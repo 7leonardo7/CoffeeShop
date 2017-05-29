@@ -1,10 +1,11 @@
 package com.esipovich.coffeeshop.model;
 
 import com.esipovich.coffeeshop.util.DateTimeUtil;
-
 import javax.persistence.*;
 import java.util.Date;
 
+//попробовать аннотирование всех полей, с целью убрать CoffeeOrder.hbm.xml
+//подойдет ли такой варинт для eclipselink
 @Entity
 @Table(name = "coffeeorder")
 public class CoffeeOrder {
