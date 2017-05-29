@@ -9,7 +9,7 @@ public class DateTimeUtil{
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public static String convertDateToString(Date date) {
-        return dateFormat.format(date);
+        return date == null ? "" : dateFormat.format(date);
     }
 
 }

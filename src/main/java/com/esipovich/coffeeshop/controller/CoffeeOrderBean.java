@@ -6,12 +6,15 @@ import com.esipovich.coffeeshop.dao.CoffeeOrderDaoHibernate;
 import com.esipovich.coffeeshop.model.CoffeeOrder;
 import com.esipovich.coffeeshop.util.Coffee;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,16 +26,13 @@ public class CoffeeOrderBean {
     private DataModel orderList;
     private CoffeeOrderDao orderDao;
     private String delivery, orderStatus;
-    //изначально при операции add на форме поле quantity = 0.0,
-    // если нажать add то exception,
-    //поэтому ввел минимальное значение по умолчанию
     private static final double MIN_QUANTITY = 100;
     private Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
 
     @PostConstruct
     public void init(){
         //можно переключаться между hibernate/eclipselink
-        orderDao = new CoffeeOrderDaoHibernate();
+        orderDao = new CoffeeOrderDaoEclipseLink();
     }
 
     public Locale getLocale() {
@@ -82,6 +82,7 @@ public class CoffeeOrderBean {
     }
 
     public String addOrder(){
+        setEmptyTimeIfPickup();
         orderDao.save(order);
         orderStatus = "The order is accepted";
         return "orders";
@@ -96,6 +97,7 @@ public class CoffeeOrderBean {
     }
 
     public String updateOrder(){
+        setEmptyTimeIfPickup();
         orderDao.update(order);
         orderStatus = "The order was successfully changed";
         return "orders";
@@ -154,7 +156,14 @@ public class CoffeeOrderBean {
         FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale(language));
     }
 
-    public void validateDate(FacesContext context, UIComponent component, Object value){
+    public void setCurrentDateTime(){
+        if(order.getDeliveryTimeFrom() == null && order.getDeliveryTimeTo() == null) {
+            Calendar calendar = Calendar.getInstance();
+            Date date = calendar.getTime();
+            order.setDeliveryTimeFrom(date);
+            calendar.add(Calendar.HOUR, 1);
+            order.setDeliveryTimeTo(calendar.getTime());
+        }
     }
 
 

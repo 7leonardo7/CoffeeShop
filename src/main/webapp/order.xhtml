@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
     <title>Order info</title>
@@ -22,13 +23,19 @@
             padding: 5px;
             border-spacing: 10px;
         }
-        .list{
-            width: 170px;
+        .list {
+            width: 180px;
+        }
+        .inputData{
+            width: 175px;
         }
         .messages{
             margin: auto;
             align-content: center;
             color: red;
+        }
+        .dateTimeField{
+            font-size: small;
         }
 
     </style>
@@ -65,39 +72,57 @@
         <h:selectOneRadio id="delivery" value="#{coffeeOrderBean.delivery}">
             <f:selectItem itemValue="0" itemLabel="#{msg['pickup']}"/>
             <f:selectItem itemValue="1" itemLabel="#{msg['express']} (1$)"/>
-            <f:ajax execute="@this" render="form" listener="#{coffeeOrderBean.setEmptyTimeIfPickup()}"/>
             <f:ajax execute="@this" render="cost" listener="#{coffeeOrderBean.countCost()}"/>
+            <f:ajax execute="@this" render="startDate endDate" listener="#{coffeeOrderBean.setCurrentDateTime()}"/>
         </h:selectOneRadio>
 
-        <c:if test="#{coffeeOrderBean.delivery == 1}">
+
             #{msg['from']}
             <!-- не валидируется, если значение не правильное то просто не присваивается-->
             <!-- если выбирать express и указать невалидную дату то стоимость считается неправильно на 1$-->
             <!-- дата присваивается полю бина только после применения ajax, почему?-->
-            <h:inputText id="startDate" value="#{coffeeOrderBean.order.deliveryTimeFrom}">
+            <!--<h:inputText id="startDate" value="#{coffeeOrderBean.order.deliveryTimeFrom}">
                 <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
                 <f:ajax execute="@this" render="form"/>
-            </h:inputText>
+            </h:inputText>-->
+
+            <p:calendar id="startDate" value="#{coffeeOrderBean.order.deliveryTimeFrom}" styleClass="dateTimeField"
+                        disabled="#{coffeeOrderBean.delivery == 0 ? true : false}"
+                        pattern="yyyy-MM-dd HH:mm"
+                        maxdate="#{coffeeOrderBean.order.deliveryTimeTo}">
+                <p:ajax event="dateSelect" update="endDate"/>
+            </p:calendar>
 
             #{msg['to']}
-            <h:inputText id="endDate" value="#{coffeeOrderBean.order.deliveryTimeTo}">
-                <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
-                <f:ajax execute="@this" render="form"/>
-            </h:inputText>
+            <p:calendar id="endDate" value="#{coffeeOrderBean.order.deliveryTimeTo}" styleClass="dateTimeField"
+                    disabled="#{coffeeOrderBean.delivery == 0 ? true : false}"
+                    pattern="yyyy-MM-dd HH:mm"
+                    mindate="#{coffeeOrderBean.order.deliveryTimeFrom}"
+                    minHour="#{coffeeOrderBean.order.deliveryTimeFrom.hours + 1}">
+            <p:ajax event="dateSelect" update="startDate"/>
 
-        </c:if>
+            </p:calendar>
+
+
+
+
+
 
         #{msg['quantity']}
-        <h:inputText id="quantity" value="#{coffeeOrderBean.order.quantity}" required="true" requiredMessage="Quantity is required!">
+        <h:inputText id="quantity" value="#{coffeeOrderBean.order.quantity}"
+                     required="true" requiredMessage="Quantity is required!"
+                     styleClass="inputData">
             <f:validator validatorId="com.esipovich.coffeeshop.util.validator.QuantityValidator"/>
             <f:ajax execute="@this" render="cost quantityMessage" listener="#{coffeeOrderBean.countCost()}"/>
         </h:inputText>
 
         #{msg['cost']}
-        <h:inputText id="cost" value="#{coffeeOrderBean.order.cost}" readonly="true"/>
+        <h:inputText id="cost" value="#{coffeeOrderBean.order.cost}" readonly="true"
+                styleClass="inputData"/>
 
     </h:panelGrid>
     </h:form>
+
 
     <h:panelGrid styleClass="messages">
         <h:message id="quantityMessage" for="quantity"/>
