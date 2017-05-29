@@ -17,12 +17,12 @@ CREATE TABLE `coffeeshop`.`coffeeorder` (
 PRIMARY KEY (`id`));
 
 
-INSERT INTO `coffeeshop`.`coffeeorder` (`coffeeKind`, `quantity`, `cost`) VALUES ('espresso', '155', '1550');
+INSERT INTO `coffeeshop`.`coffeeorder` (`coffeeKind`, `quantity`, `cost`) VALUES ('Espresso', '155', '1550');
 
 INSERT INTO `coffeeshop`.`coffeeorder` (`coffeeKind`, `quantity`, `cost`, `deliveryTimeFrom`, `deliveryTimeTo`) 
-VALUES ('lungo', '112', '1143.4', '2017-05-24 17:00', '2017-05-24 18:00');
+VALUES ('Lungo', '112', '1143.4', '2017-05-24 17:00', '2017-05-24 18:00');
 
 INSERT INTO `coffeeshop`.`coffeeorder` (`coffeeKind`, `quantity`, `cost`) VALUES ('3 in 1', '100', '550');
 
 INSERT INTO `coffeeshop`.`coffeeorder` (`coffeeKind`, `quantity`, `cost`, `deliveryTimeFrom`, `deliveryTimeTo`) 
-VALUES ('macchiato', '220', '2751', '2017-05-25 12:10', '2017-05-25 16:30');
+VALUES ('Macchiato', '220', '2751', '2017-05-25 12:10', '2017-05-25 16:30');
