@@ -1,6 +1,7 @@
 package com.esipovich.coffeeshop.controller;
 
 import com.esipovich.coffeeshop.dao.CoffeeOrderDao;
+import com.esipovich.coffeeshop.dao.CoffeeOrderDaoEclipseLink;
 import com.esipovich.coffeeshop.dao.CoffeeOrderDaoHibernate;
 import com.esipovich.coffeeshop.model.CoffeeOrder;
 import com.esipovich.coffeeshop.util.Coffee;
@@ -30,6 +31,7 @@ public class CoffeeOrderBean {
 
     @PostConstruct
     public void init(){
+        //можно переключаться между hibernate/eclipselink
         orderDao = new CoffeeOrderDaoHibernate();
     }
 

@@ -1,7 +1,7 @@
 package com.esipovich.coffeeshop.dao;
 
 import com.esipovich.coffeeshop.model.CoffeeOrder;
-import com.esipovich.coffeeshop.util.HibernateUtil;
+import com.esipovich.coffeeshop.util.DBUtil.HibernateUtil;
 import org.hibernate.Session;
 import java.util.List;
 

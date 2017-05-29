@@ -1,10 +1,17 @@
 package com.esipovich.coffeeshop.model;
 
 import com.esipovich.coffeeshop.util.DateTimeUtil;
+
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "coffeeorder")
 public class CoffeeOrder {
 
+    @Id
+    //стратегия AUTO вызывает exception, если id - auto-increment
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String coffeeKind;

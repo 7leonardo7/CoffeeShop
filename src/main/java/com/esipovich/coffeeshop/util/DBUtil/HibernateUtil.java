@@ -1,4 +1,4 @@
-package com.esipovich.coffeeshop.util;
+package com.esipovich.coffeeshop.util.DBUtil;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
